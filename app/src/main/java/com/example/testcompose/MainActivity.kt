@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,12 +27,20 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp() {
     val navController = rememberNavController()
+    val viewModel: AppViewModel = viewModel()
+
     NavHost(navController = navController, startDestination = "first_screen") {
         composable("first_screen") {
-            FirstScreen(onNavigateToSecondScreen = { navController.navigate("second_screen") })
+            FirstScreen(
+                onNavigateToSecondScreen = { navController.navigate("second_screen") },
+                viewModel = viewModel
+            )
         }
         composable("second_screen") {
-            SecondScreen(onNavigateBack = { navController.popBackStack() })
+            SecondScreen(
+                onNavigateBack = { navController.popBackStack() },
+                viewModel = viewModel
+            )
         }
     }
 }

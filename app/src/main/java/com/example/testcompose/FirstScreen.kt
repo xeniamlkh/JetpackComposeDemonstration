@@ -36,14 +36,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.testcompose.data.Decoration
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FirstScreen(onNavigateToSecondScreen: () -> Unit) {
+fun FirstScreen(
+    onNavigateToSecondScreen: () -> Unit,
+    viewModel: AppViewModel
+) {
 
     val state = rememberLazyListState()
 
@@ -61,9 +64,10 @@ fun FirstScreen(onNavigateToSecondScreen: () -> Unit) {
 
             DecorationsList(
                 modifier = Modifier.padding(innerPadding),
-                DecorationsList.list,
+                com.example.testcompose.data.DecorationsList.list,
                 state,
-                onNavigateToSecondScreen
+                onNavigateToSecondScreen,
+                viewModel
             )
 
         }
@@ -75,7 +79,8 @@ fun DecorationsList(
     modifier: Modifier = Modifier,
     decorations: List<Decoration>,
     state: LazyListState,
-    onNavigateToSecondScreen: () -> Unit
+    onNavigateToSecondScreen: () -> Unit,
+    viewModel: AppViewModel
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -89,7 +94,8 @@ fun DecorationsList(
                 decoration.id,
                 decoration.description,
                 decoration.price,
-                onNavigateToSecondScreen
+                onNavigateToSecondScreen,
+                viewModel
             )
         }
     }
@@ -100,9 +106,9 @@ fun DecorationItem(
     id: Int,
     decoration: String,
     price: Double,
-    onNavigateToSecondScreen: () -> Unit
+    onNavigateToSecondScreen: () -> Unit,
+    viewModel: AppViewModel
 ) {
-
     var count by rememberSaveable { mutableIntStateOf(0) }
     var isInCart by rememberSaveable { mutableStateOf(false) }
 
@@ -145,7 +151,12 @@ fun DecorationItem(
                             Text("+", color = MaterialTheme.colorScheme.onPrimary)
                         }
                         ElevatedButton(
-                            onClick = { if (count > 0) onNavigateToSecondScreen() },
+                            onClick = {
+                                if (count > 0) {
+                                    viewModel.saveCounter(count)
+                                    onNavigateToSecondScreen()
+                                }
+                            },
                             modifier = Modifier.padding(start = 10.dp)
                         ) {
                             Icon(
@@ -177,14 +188,4 @@ fun ScrollToTopButton(state: LazyListState) {
             contentDescription = "Scroll to Top"
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DecorationItemPreview() {
-    DecorationItem(
-        DecorationsList.list[0].id,
-        DecorationsList.list[0].description,
-        DecorationsList.list[0].price
-    ) { }
 }

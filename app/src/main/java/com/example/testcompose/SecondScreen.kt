@@ -12,12 +12,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondScreen(onNavigateBack: () -> Unit) {
+fun SecondScreen(onNavigateBack: () -> Unit, viewModel: AppViewModel) {
+
+    val count by viewModel.counter.collectAsState()
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -37,6 +42,7 @@ fun SecondScreen(onNavigateBack: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text("CHECKOUT SCREEN")
+                Text("Count from ViewModel = $count")
                 Button(onClick = onNavigateBack) {
                     Text("Back")
                 }

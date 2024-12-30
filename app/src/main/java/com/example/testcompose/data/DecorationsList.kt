@@ -1,4 +1,6 @@
-package com.example.testcompose
+package com.example.testcompose.data
+
+import com.example.testcompose.R
 
 object DecorationsList {
     val list = listOf(
