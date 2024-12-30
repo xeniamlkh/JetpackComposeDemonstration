@@ -1,7 +1,7 @@
 package com.example.testcompose
 
 object DecorationsList {
-    val list = listOf<Decoration>(
+    val list = listOf(
         Decoration(R.drawable.a, "Christmas Star", 40.00),
         Decoration(R.drawable.b, "Snowman", 10.20),
         Decoration(R.drawable.c, "Santa with Holly plant", 50.00),
